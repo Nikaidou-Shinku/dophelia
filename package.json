@@ -10,9 +10,11 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@solidjs/router": "^0.14.1",
     "solid-js": "^1.8.18"
   },
   "devDependencies": {
+    "@types/node": "^20.14.10",
     "autoprefixer": "^10.4.19",
     "cssnano": "^7.0.4",
     "husky": "^9.0.11",
