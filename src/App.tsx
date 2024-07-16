@@ -1,9 +1,9 @@
-import { createSignal } from 'solid-js'
-import solidLogo from './assets/solid.svg'
-import viteLogo from '/vite.svg'
+import { createSignal } from "solid-js";
+import solidLogo from "./assets/solid.svg";
+import viteLogo from "/vite.svg";
 
-function App() {
-  const [count, setCount] = createSignal(0)
+export default () => {
+  const [count, setCount] = createSignal(0);
 
   return (
     <>
@@ -24,11 +24,7 @@ function App() {
           Edit <code>src/App.tsx</code> and save to test HMR
         </p>
       </div>
-      <p class="text-xl">
-        Click on the Vite and Solid logos to learn more
-      </p>
+      <p class="text-xl">Click on the Vite and Solid logos to learn more</p>
     </>
-  )
-}
-
-export default App
+  );
+};
