@@ -19,3 +19,9 @@ export interface ChapterInfo {
   createTime: string;
   updateTime: string | null;
 }
+
+export interface ThanatosVersion {
+  version: string;
+  gitHash: string;
+  buildTime: number;
+}

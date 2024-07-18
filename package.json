@@ -11,6 +11,7 @@
     "fmt": "prettier . --write"
   },
   "dependencies": {
+    "@solid-primitives/scheduled": "^1.4.3",
     "@solidjs/router": "^0.14.1",
     "@tanstack/solid-query": "^5.51.9",
     "cal-heatmap": "^4.2.4",
@@ -22,7 +23,7 @@
     "@types/node": "^20.14.11",
     "autoprefixer": "^10.4.19",
     "cssnano": "^7.0.4",
-    "husky": "^9.0.11",
+    "husky": "^9.1.1",
     "lint-staged": "^15.2.7",
     "postcss": "^8.4.39",
     "prettier": "^3.3.3",

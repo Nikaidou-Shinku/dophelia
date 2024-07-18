@@ -1,4 +1,5 @@
 import { resolve } from "node:path";
+import child_process from "node:child_process";
 import { defineConfig } from "vite";
 import solid from "vite-plugin-solid";
 
@@ -16,5 +17,11 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/api/, ""),
       },
     },
+  },
+  define: {
+    APP_VERSION: JSON.stringify(process.env.npm_package_version),
+    GIT_HASH: JSON.stringify(
+      child_process.execSync("git rev-parse HEAD").toString(),
+    ),
   },
 });
