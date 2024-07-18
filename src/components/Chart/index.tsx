@@ -1,5 +1,5 @@
 import { createMemo, onMount } from "solid-js";
-import { Chart, Colors, Tooltip } from "chart.js";
+import { Chart, Colors, LinearScale, Tooltip } from "chart.js";
 import { Bar } from "solid-chartjs";
 import { ChapterInfo } from "~/data/interface";
 
@@ -10,7 +10,7 @@ interface ChartProps {
 
 export default (props: ChartProps) => {
   onMount(() => {
-    Chart.register(Tooltip, Colors);
+    Chart.register(Colors, LinearScale, Tooltip);
   });
 
   const source = createMemo(() => {
