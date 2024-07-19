@@ -49,7 +49,12 @@ export default (props: HeatmapProps) => {
         start: new Date(props.currentYear, 1),
         min: data[0].date,
         max: data[data.length - 1].date,
-        locale: "zh",
+        locale: {
+          months:
+            "一月_二月_三月_四月_五月_六月_七月_八月_九月_十月_十一月_十二月".split(
+              "_",
+            ),
+        },
         timezone: "Etc/UTC",
       },
       data: {
