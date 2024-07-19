@@ -41,11 +41,11 @@ export default () => {
   }));
 
   return (
-    <div class="flex h-[100dvh] w-[100dvw] flex-col items-center">
-      <div class="flex flex-1 flex-col items-center justify-center space-y-2">
-        <h1 class="text-2xl">菠萝包更新统计</h1>
+    <div class="flex h-dvh w-dvw flex-col items-center">
+      <div class="flex w-4/5 flex-1 flex-col items-center justify-center space-y-8">
+        <h1 class="text-3xl">菠萝包更新统计</h1>
         <input
-          class="rounded border px-2 py-1 shadow-inner"
+          class="h-12 w-full max-w-96 rounded border px-4 py-2 text-lg shadow-inner"
           placeholder="输入关键字搜索…"
           onInput={(e) => setKeyword(e.currentTarget.value)}
           value={keyword()}
@@ -54,10 +54,11 @@ export default () => {
           <For each={searchQuery.data}>
             {(novel) => (
               <A
-                class="border-b px-4 py-2 hover:bg-gray-100"
+                class="flex flex-col border-b px-4 py-2 hover:bg-gray-100"
                 href={`/novels/${novel.id}`}
               >
-                {novel.title} - {novel.author.name}
+                <span>{novel.title}</span>
+                <span class="text-sm text-gray-400">{novel.author.name}</span>
               </A>
             )}
           </For>
