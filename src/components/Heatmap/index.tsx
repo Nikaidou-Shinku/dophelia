@@ -1,5 +1,6 @@
 import { createEffect, createMemo, onCleanup } from "solid-js";
 import { createMediaQuery } from "@solid-primitives/media";
+import dayjs from "dayjs";
 // @ts-ignore
 import CalHeatmap from "cal-heatmap";
 // @ts-ignore
@@ -24,11 +25,15 @@ export default (props: HeatmapProps) => {
 
   const calData = createMemo(() =>
     props.data.map((chapter) => ({
-      date: `${
-        props.ignoreUpdate
-          ? chapter.createTime
-          : (chapter.updateTime ?? chapter.createTime)
-      }Z`,
+      date: dayjs
+        .tz(
+          props.ignoreUpdate
+            ? chapter.createTime
+            : (chapter.updateTime ?? chapter.createTime),
+          // NOTE: match the UTC time zone that cal-heatmap cannot change
+          "Etc/UTC",
+        )
+        .toISOString(),
       value: chapter.charCount,
     })),
   );
@@ -55,6 +60,7 @@ export default (props: HeatmapProps) => {
               "_",
             ),
         },
+        // NOTE: this seems unchangeable
         timezone: "Etc/UTC",
       },
       data: {

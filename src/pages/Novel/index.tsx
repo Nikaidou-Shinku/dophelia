@@ -1,7 +1,8 @@
 import { createSignal, Match, Show, Switch } from "solid-js";
 import { createMediaQuery } from "@solid-primitives/media";
 import { createWindowSize } from "@solid-primitives/resize-observer";
-import { createQueries } from "@tanstack/solid-query";
+import dayjs from "dayjs";
+import { createQuery } from "@tanstack/solid-query";
 import { useParams } from "@solidjs/router";
 import { ChapterInfo, NovelInfo } from "~/data/interface";
 import { Chart, Heatmap } from "~/components";
@@ -9,28 +10,37 @@ import { Chart, Heatmap } from "~/components";
 export default () => {
   const params = useParams();
 
-  const [novelQuery, chaptersQuery] = createQueries(() => ({
-    queries: [
-      {
-        queryKey: ["novels", params.id],
-        queryFn: async (props) => {
-          const resp = await fetch(`/api/novels/${props.queryKey[1]}`);
-          const res: NovelInfo = await resp.json();
-          return res;
-        },
-      },
-      {
-        queryKey: ["novels", params.id, "chapters"],
-        queryFn: async (props) => {
-          const resp = await fetch(`/api/novels/${props.queryKey[1]}/chapters`);
-          const res: ChapterInfo[] = await resp.json();
-          return res;
-        },
-      },
-    ],
+  const novelQuery = createQuery(() => ({
+    queryKey: ["novels", params.id],
+    queryFn: async (props) => {
+      const resp = await fetch(`/api/novels/${props.queryKey[1]}`);
+      const res: NovelInfo = await resp.json();
+      return res;
+    },
   }));
 
-  const [year, setYear] = createSignal(new Date().getFullYear());
+  const chaptersQuery = createQuery(() => ({
+    queryKey: ["novels", params.id, "chapters"],
+    queryFn: async (props) => {
+      const resp = await fetch(`/api/novels/${props.queryKey[1]}/chapters`);
+      const res: ChapterInfo[] = await resp.json();
+      return res;
+    },
+  }));
+
+  const latestChapterTime = () => {
+    if (!chaptersQuery.isSuccess) {
+      return null;
+    }
+
+    const source = chaptersQuery.data.map((c) =>
+      dayjs.tz(c.updateTime ?? c.createTime, "Asia/Shanghai"),
+    );
+
+    return dayjs.max(source);
+  };
+
+  const [year, setYear] = createSignal(dayjs().year());
 
   const windowSize = createWindowSize();
   const screenLarge = createMediaQuery("(min-width: 1024px)");
@@ -64,13 +74,23 @@ export default () => {
                 </div>
                 <span>作者：{novelQuery.data!.author.name}</span>
                 <span>字数：{novelQuery.data!.charCount} 字</span>
-                <div>
+                <div class="space-x-2">
                   <Show
                     when={novelQuery.data!.isFinish}
                     fallback={
-                      <span class="rounded bg-green-600 px-2 py-1 text-white">
-                        连载中
-                      </span>
+                      <>
+                        <span class="rounded bg-green-600 px-2 py-1 text-white">
+                          连载中
+                        </span>
+                        <Show when={latestChapterTime()}>
+                          {(t) => (
+                            <span class="text-sm text-gray-400">
+                              作者已经 {t().toNow(true)}
+                              没有更新了，生产队的驴都不敢这么歇！
+                            </span>
+                          )}
+                        </Show>
+                      </>
                     }
                   >
                     <span class="rounded bg-blue-600 px-2 py-1 text-white">
