@@ -21,7 +21,7 @@ export default (props: AppProps) => {
   }));
 
   return (
-    <>
+    <div class="flex h-dvh flex-col space-y-4">
       <div class="border-b bg-gray-100 px-6 py-3">
         <A class="text-blue-600 hover:text-blue-500" href="/">
           Dophelia
@@ -53,6 +53,6 @@ export default (props: AppProps) => {
           >{` v${versionQuery.data!.version} (${versionQuery.data!.gitHash.slice(0, 7)})`}</Show>
         </span>
       </div>
-    </>
+    </div>
   );
 };

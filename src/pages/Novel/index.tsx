@@ -47,7 +47,7 @@ export default () => {
   const chartWidth = () => (screenLarge() ? 918 : windowSize.width - 64);
 
   return (
-    <div class="flex justify-center p-8">
+    <div class="flex justify-center px-4">
       <div class="flex flex-col items-center space-y-4">
         <div class="flex w-full items-center rounded-lg border lg:items-start">
           <Switch>
