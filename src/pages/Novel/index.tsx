@@ -3,7 +3,7 @@ import { createMediaQuery } from "@solid-primitives/media";
 import { createWindowSize } from "@solid-primitives/resize-observer";
 import dayjs from "dayjs";
 import { createQuery } from "@tanstack/solid-query";
-import { useParams } from "@solidjs/router";
+import { A, useParams } from "@solidjs/router";
 import { ChapterInfo, NovelInfo } from "~/data/interface";
 import { Chart, Heatmap } from "~/components";
 
@@ -62,43 +62,59 @@ export default () => {
               </div>
             </Match>
             <Match when={novelQuery.isSuccess}>
-              <div class="basis-2/5 lg:basis-1/4">
-                <img class="lg:rounded-l-lg" src={novelQuery.data!.cover} />
-              </div>
-              <div class="flex basis-3/5 flex-col space-y-2 p-4 lg:basis-3/4">
-                <div class="flex items-end justify-between">
-                  <h1 class="text-2xl">{novelQuery.data!.title}</h1>
-                  <span class="hidden text-sm text-gray-400 lg:block">
-                    #{novelQuery.data!.id}
-                  </span>
-                </div>
-                <span>作者：{novelQuery.data!.author.name}</span>
-                <span>字数：{novelQuery.data!.charCount} 字</span>
-                <div class="space-x-2">
-                  <Show
-                    when={novelQuery.data!.isFinish}
-                    fallback={
-                      <>
-                        <span class="rounded bg-green-600 px-2 py-1 text-white">
-                          连载中
+              <Show
+                when={novelQuery.data}
+                fallback={
+                  <div class="flex w-full flex-col space-y-4 px-24 py-12 text-center">
+                    <span class="text-2xl">这本书不存在！</span>
+                    <A class="text-blue-600 hover:text-blue-500" href="/">
+                      返回主页
+                    </A>
+                  </div>
+                }
+              >
+                {(novel) => (
+                  <>
+                    <div class="basis-2/5 lg:basis-1/4">
+                      <img class="lg:rounded-l-lg" src={novel().cover} />
+                    </div>
+                    <div class="flex basis-3/5 flex-col space-y-2 p-4 lg:basis-3/4">
+                      <div class="flex items-end justify-between">
+                        <h1 class="text-2xl">{novel().title}</h1>
+                        <span class="hidden text-sm text-gray-400 lg:block">
+                          #{novel().id}
                         </span>
-                        <Show when={latestChapterTime()}>
-                          {(t) => (
-                            <span class="text-sm text-gray-400">
-                              作者已经 {t().toNow(true)}
-                              没有更新了，生产队的驴都不敢这么歇！
-                            </span>
-                          )}
+                      </div>
+                      <span>作者：{novel().author.name}</span>
+                      <span>字数：{novel().charCount} 字</span>
+                      <div class="space-x-2">
+                        <Show
+                          when={novel().isFinish}
+                          fallback={
+                            <>
+                              <span class="rounded bg-green-600 px-2 py-1 text-white">
+                                连载中
+                              </span>
+                              <Show when={latestChapterTime()}>
+                                {(t) => (
+                                  <span class="text-sm text-gray-400">
+                                    作者已经 {t().toNow(true)}
+                                    没有更新了，生产队的驴都不敢这么歇！
+                                  </span>
+                                )}
+                              </Show>
+                            </>
+                          }
+                        >
+                          <span class="rounded bg-blue-600 px-2 py-1 text-white">
+                            已完结
+                          </span>
                         </Show>
-                      </>
-                    }
-                  >
-                    <span class="rounded bg-blue-600 px-2 py-1 text-white">
-                      已完结
-                    </span>
-                  </Show>
-                </div>
-              </div>
+                      </div>
+                    </div>
+                  </>
+                )}
+              </Show>
             </Match>
           </Switch>
         </div>
@@ -114,36 +130,38 @@ export default () => {
             </div>
           </Match>
           <Match when={chaptersQuery.isSuccess}>
-            <div class="flex w-full flex-col space-y-4 lg:flex-row lg:space-x-4 lg:space-y-0">
-              <div class="flex items-center justify-around space-x-2 rounded-lg border p-4 lg:flex-col lg:space-x-0">
-                <button
-                  class="rounded bg-gray-200 px-2 py-1 hover:bg-gray-300 active:bg-gray-400"
-                  onClick={() => setYear((y) => y - 1)}
-                >
-                  上一年
-                </button>
-                <span class="text-xl font-bold">{year()} 年</span>
-                <button
-                  class="rounded bg-gray-200 px-2 py-1 hover:bg-gray-300 active:bg-gray-400"
-                  onClick={() => setYear((y) => y + 1)}
-                >
-                  下一年
-                </button>
+            <Show when={chaptersQuery.data!.length > 0}>
+              <div class="flex w-full flex-col space-y-4 lg:flex-row lg:space-x-4 lg:space-y-0">
+                <div class="flex items-center justify-around space-x-2 rounded-lg border p-4 lg:flex-col lg:space-x-0">
+                  <button
+                    class="rounded bg-gray-200 px-2 py-1 hover:bg-gray-300 active:bg-gray-400"
+                    onClick={() => setYear((y) => y - 1)}
+                  >
+                    上一年
+                  </button>
+                  <span class="text-xl font-bold">{year()} 年</span>
+                  <button
+                    class="rounded bg-gray-200 px-2 py-1 hover:bg-gray-300 active:bg-gray-400"
+                    onClick={() => setYear((y) => y + 1)}
+                  >
+                    下一年
+                  </button>
+                </div>
+                <div class="flex-1 rounded-lg border p-8 lg:p-4">
+                  <Heatmap
+                    data={chaptersQuery.data!}
+                    currentYear={year()}
+                    ignoreUpdate={true}
+                  />
+                </div>
               </div>
-              <div class="flex-1 rounded-lg border p-8 lg:p-4">
-                <Heatmap
-                  data={chaptersQuery.data!}
-                  currentYear={year()}
-                  ignoreUpdate={true}
-                />
-              </div>
-            </div>
-            <Chart
-              data={chaptersQuery.data!}
-              ignoreUpdate={true}
-              width={chartWidth()}
-              height={screenLarge() ? 320 : chartWidth() / 2}
-            />
+              <Chart
+                data={chaptersQuery.data!}
+                ignoreUpdate={true}
+                width={chartWidth()}
+                height={screenLarge() ? 320 : chartWidth() / 2}
+              />
+            </Show>
           </Match>
         </Switch>
       </div>
