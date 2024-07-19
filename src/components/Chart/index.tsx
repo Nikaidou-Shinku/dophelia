@@ -6,6 +6,8 @@ import { ChapterInfo } from "~/data/interface";
 interface ChartProps {
   data: ChapterInfo[];
   ignoreUpdate: boolean;
+  width: number;
+  height: number;
 }
 
 export default (props: ChartProps) => {
@@ -39,12 +41,5 @@ export default (props: ChartProps) => {
     ],
   });
 
-  return (
-    <Bar
-      data={chartData()}
-      // FIXME: magic number
-      width={930}
-      height={310}
-    />
-  );
+  return <Bar data={chartData()} width={props.width} height={props.height} />;
 };

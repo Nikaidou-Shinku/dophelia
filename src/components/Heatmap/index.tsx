@@ -1,4 +1,5 @@
 import { createEffect, createMemo, onCleanup } from "solid-js";
+import { createMediaQuery } from "@solid-primitives/media";
 // @ts-ignore
 import CalHeatmap from "cal-heatmap";
 // @ts-ignore
@@ -16,6 +17,9 @@ interface HeatmapProps {
 
 export default (props: HeatmapProps) => {
   let divRef: HTMLDivElement | undefined;
+  let legendRef: HTMLDivElement | undefined;
+
+  const screenLarge = createMediaQuery("(min-width: 1024px)");
 
   const calData = createMemo(() =>
     props.data.map((chapter) => ({
@@ -48,6 +52,7 @@ export default (props: HeatmapProps) => {
         y: "value",
         defaultValue: 0,
       },
+      verticalOrientation: !screenLarge(),
       scale: {
         color: {
           scheme: "Greens",
@@ -69,11 +74,24 @@ export default (props: HeatmapProps) => {
             `${dayjsDate.format("YYYY-MM-DD")} | ${value}字`,
         },
       ],
-      [Legend, { label: "每日更新字数" }],
+      [
+        Legend,
+        {
+          itemSelector: legendRef,
+          label: "每日更新字数",
+        },
+      ],
     ]);
   });
 
   onCleanup(() => cal.destroy());
 
-  return <div ref={divRef}></div>;
+  return (
+    <div ref={divRef} class="flex flex-col items-center lg:flex-col-reverse">
+      <div
+        ref={legendRef}
+        class="mb-4 flex justify-center lg:mb-0 lg:mt-2"
+      ></div>
+    </div>
+  );
 };

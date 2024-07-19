@@ -11,6 +11,8 @@
     "fmt": "prettier . --write"
   },
   "dependencies": {
+    "@solid-primitives/media": "^2.2.9",
+    "@solid-primitives/resize-observer": "^2.0.26",
     "@solid-primitives/scheduled": "^1.4.3",
     "@solidjs/router": "^0.14.1",
     "@tanstack/solid-query": "^5.51.9",
