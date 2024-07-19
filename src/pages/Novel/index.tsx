@@ -92,12 +92,12 @@ export default () => {
                           when={novel().isFinish}
                           fallback={
                             <>
-                              <span class="rounded bg-green-600 px-2 py-1 text-white">
+                              <span class="rounded bg-green-600 px-2 py-1 text-sm text-white">
                                 连载中
                               </span>
                               <Show when={latestChapterTime()}>
                                 {(t) => (
-                                  <span class="text-sm text-gray-400">
+                                  <span class="text-gray-400">
                                     作者已经 {t().toNow(true)}
                                     没有更新了，生产队的驴都不敢这么歇！
                                   </span>
