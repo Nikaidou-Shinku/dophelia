@@ -90,6 +90,9 @@ export default (props: DeadlineChartProps) => {
             text: "人离死线越近，死线离人越近",
             font: { size: 16 },
           },
+          tooltip: {
+            intersect: false,
+          },
         },
       }}
       width={props.width}

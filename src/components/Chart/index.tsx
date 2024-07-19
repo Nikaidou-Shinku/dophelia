@@ -53,6 +53,9 @@ export default (props: ChartProps) => {
             text: "全天更新时间统计",
             font: { size: 16 },
           },
+          tooltip: {
+            intersect: false,
+          },
         },
       }}
       width={props.width}
