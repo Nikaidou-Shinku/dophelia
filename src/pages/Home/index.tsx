@@ -1,11 +1,8 @@
-import { createMemo, createSignal, For, Show } from "solid-js";
+import { createMemo, createSignal, For } from "solid-js";
 import { createScheduled, debounce } from "@solid-primitives/scheduled";
 import { createQuery } from "@tanstack/solid-query";
 import { A } from "@solidjs/router";
-import { NovelInfo, ThanatosVersion } from "~/data/interface";
-
-declare const APP_VERSION: string;
-declare const GIT_HASH: string;
+import { NovelInfo } from "~/data/interface";
 
 export default () => {
   const [keyword, setKeyword] = createSignal("");
@@ -15,15 +12,6 @@ export default () => {
     const value = keyword();
     return scheduled() ? value : prev;
   });
-
-  const versionQuery = createQuery(() => ({
-    queryKey: ["version"],
-    queryFn: async () => {
-      const resp = await fetch("/api/version");
-      const res: ThanatosVersion = await resp.json();
-      return res;
-    },
-  }));
 
   const searchQuery = createQuery(() => ({
     queryKey: ["search", debouncedKeyword().trim()],
@@ -41,7 +29,7 @@ export default () => {
   }));
 
   return (
-    <div class="flex h-[calc(100dvh-49px)] w-dvw flex-col items-center">
+    <div class="flex h-[calc(100dvh-121px)] w-dvw flex-col items-center">
       <div class="flex w-4/5 flex-1 flex-col items-center justify-center space-y-8">
         <h1 class="text-3xl">菠萝包更新统计</h1>
         <input
@@ -63,31 +51,6 @@ export default () => {
             )}
           </For>
         </div>
-      </div>
-      <div class="flex flex-col items-center">
-        <span>Powered by</span>
-        <span>
-          <a
-            class="text-blue-600 hover:text-blue-500"
-            href="https://github.com/Nikaidou-Shinku/dophelia"
-            target="_blank"
-          >
-            Dophelia
-          </a>
-          {` v${APP_VERSION} (${GIT_HASH.slice(0, 7)})`}
-        </span>
-        <span>
-          <a
-            class="text-blue-600 hover:text-blue-500"
-            href="https://github.com/Nikaidou-Shinku/thanatos"
-            target="_blank"
-          >
-            Thanatos
-          </a>
-          <Show
-            when={versionQuery.isSuccess}
-          >{` v${versionQuery.data!.version} (${versionQuery.data!.gitHash.slice(0, 7)})`}</Show>
-        </span>
       </div>
     </div>
   );
