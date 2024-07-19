@@ -1,0 +1,13 @@
+#ch-plugin-legend text {
+  font-size: 16px;
+}
+
+.ch-domain-text {
+  font-size: 24px;
+}
+
+@media (min-width: 1024px) {
+  .ch-domain-text {
+    font-size: 16px;
+  }
+}

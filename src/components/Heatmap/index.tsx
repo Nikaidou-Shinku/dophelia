@@ -8,6 +8,7 @@ import Tooltip from "cal-heatmap/plugins/Tooltip";
 import Legend from "cal-heatmap/plugins/Legend";
 import { ChapterInfo } from "~/data/interface";
 import "cal-heatmap/cal-heatmap.css";
+import "./styles.css";
 
 interface HeatmapProps {
   data: ChapterInfo[];
@@ -37,8 +38,13 @@ export default (props: HeatmapProps) => {
 
     return {
       itemSelector: divRef,
-      domain: { type: "month" },
-      subDomain: { type: "day" },
+      domain: {
+        type: "month",
+        label: { position: "top", height: screenLarge() ? 25 : 48 },
+      },
+      subDomain: screenLarge()
+        ? { type: "day" }
+        : { type: "xDay", gutter: 8, width: 24, height: 24, radius: 8 },
       date: {
         start: new Date(props.currentYear, 1),
         min: data[0].date,
@@ -65,6 +71,8 @@ export default (props: HeatmapProps) => {
 
   const cal = new CalHeatmap();
 
+  onCleanup(() => cal.destroy());
+
   createEffect(() => {
     cal.paint(calendarOptions(), [
       [
@@ -84,13 +92,11 @@ export default (props: HeatmapProps) => {
     ]);
   });
 
-  onCleanup(() => cal.destroy());
-
   return (
     <div ref={divRef} class="flex flex-col items-center lg:flex-col-reverse">
       <div
         ref={legendRef}
-        class="mb-4 flex justify-center lg:mb-0 lg:mt-2"
+        class="mb-8 flex justify-center lg:mb-0 lg:mt-4"
       ></div>
     </div>
   );

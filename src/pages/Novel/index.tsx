@@ -110,7 +110,7 @@ export default () => {
                   下一年
                 </button>
               </div>
-              <div class="flex-1 rounded-lg border p-4">
+              <div class="flex-1 rounded-lg border p-8 lg:p-4">
                 <Heatmap
                   data={chaptersQuery.data!}
                   currentYear={year()}
@@ -122,7 +122,7 @@ export default () => {
               data={chaptersQuery.data!}
               ignoreUpdate={true}
               width={chartWidth()}
-              height={screenLarge() ? 340 : chartWidth() / 2}
+              height={screenLarge() ? 320 : chartWidth() / 2}
             />
           </Match>
         </Switch>
