@@ -19,9 +19,11 @@ export default (props: HeatmapProps) => {
 
   const calData = createMemo(() =>
     props.data.map((chapter) => ({
-      date: props.ignoreUpdate
-        ? chapter.createTime
-        : (chapter.updateTime ?? chapter.createTime),
+      date: `${
+        props.ignoreUpdate
+          ? chapter.createTime
+          : (chapter.updateTime ?? chapter.createTime)
+      }Z`,
       value: chapter.charCount,
     })),
   );
@@ -38,6 +40,7 @@ export default (props: HeatmapProps) => {
         min: data[0].date,
         max: data[data.length - 1].date,
         locale: "zh",
+        timezone: "Etc/UTC",
       },
       data: {
         source: data,
