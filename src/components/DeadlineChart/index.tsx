@@ -4,14 +4,36 @@ import { Chart, Colors, LinearScale, Title, Tooltip } from "chart.js";
 import { Bar } from "solid-chartjs";
 import { ChapterInfo } from "~/data/interface";
 
-interface ChartProps {
+interface DeadlineChartProps {
   data: ChapterInfo[];
   ignoreUpdate: boolean;
   width: number;
   height: number;
 }
 
-export default (props: ChartProps) => {
+const counter = (time: dayjs.Dayjs): number | null => {
+  if (time.hour() === 23) {
+    for (let i = 1; i < 12; ++i) {
+      if (time.minute() < i * 5) {
+        return i - 1;
+      }
+    }
+
+    return 11;
+  } else if (time.hour() === 0) {
+    for (let i = 1; i < 12; ++i) {
+      if (time.minute() < i * 5) {
+        return i + 11;
+      }
+    }
+
+    return 23;
+  }
+
+  return null;
+};
+
+export default (props: DeadlineChartProps) => {
   onMount(() => {
     Chart.register(Colors, LinearScale, Title, Tooltip);
   });
@@ -26,19 +48,34 @@ export default (props: ChartProps) => {
           : (chapter.updateTime ?? chapter.createTime),
         "Asia/Shanghai",
       );
-      res[time.hour()] += 1;
+
+      const pos = counter(time);
+
+      if (pos !== null) {
+        res[pos] += 1;
+      }
     }
 
     return res;
   });
 
   const chartData = () => ({
-    labels: Array.from(Array(24).keys()).map((i) => `${i}:00`),
+    labels: Array.from(Array(24).keys()).map(
+      (i) => `${i < 12 ? "23" : "00"}:${`0${(i * 5) % 60}`.slice(-2)}`,
+    ),
     datasets: [
       {
         label: "更新章节数",
         data: source(),
         borderWidth: 1,
+        backgroundColor: [
+          ...Array(12).fill("rgba(54, 162, 235, 0.5)"),
+          ...Array(12).fill("rgba(255, 99, 132, 0.5)"),
+        ],
+        borderColor: [
+          ...Array(12).fill("rgb(54, 162, 235)"),
+          ...Array(12).fill("rgb(255, 99, 132)"),
+        ],
       },
     ],
   });
@@ -50,7 +87,7 @@ export default (props: ChartProps) => {
         plugins: {
           title: {
             display: true,
-            text: "全天更新时间统计",
+            text: "人离死线越近，死线离人越近",
             font: { size: 16 },
           },
         },

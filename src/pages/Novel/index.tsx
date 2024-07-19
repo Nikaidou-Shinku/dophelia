@@ -5,7 +5,7 @@ import dayjs from "dayjs";
 import { createQuery } from "@tanstack/solid-query";
 import { A, useParams } from "@solidjs/router";
 import { ChapterInfo, NovelInfo } from "~/data/interface";
-import { Chart, Heatmap } from "~/components";
+import { Chart, DeadlineChart, Heatmap } from "~/components";
 
 export default () => {
   const params = useParams();
@@ -156,6 +156,12 @@ export default () => {
                 </div>
               </div>
               <Chart
+                data={chaptersQuery.data!}
+                ignoreUpdate={true}
+                width={chartWidth()}
+                height={screenLarge() ? 320 : chartWidth() / 2}
+              />
+              <DeadlineChart
                 data={chaptersQuery.data!}
                 ignoreUpdate={true}
                 width={chartWidth()}
