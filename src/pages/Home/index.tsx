@@ -41,7 +41,7 @@ export default () => {
   }));
 
   return (
-    <div class="flex h-dvh w-dvw flex-col items-center">
+    <div class="flex h-[calc(100dvh-49px)] w-dvw flex-col items-center">
       <div class="flex w-4/5 flex-1 flex-col items-center justify-center space-y-8">
         <h1 class="text-3xl">菠萝包更新统计</h1>
         <input
@@ -50,7 +50,7 @@ export default () => {
           onInput={(e) => setKeyword(e.currentTarget.value)}
           value={keyword()}
         />
-        <div class="flex flex-col">
+        <div class="flex w-full max-w-96 flex-col">
           <For each={searchQuery.data}>
             {(novel) => (
               <A
@@ -69,6 +69,16 @@ export default () => {
         <span>
           <a
             class="text-blue-600 hover:text-blue-500"
+            href="https://github.com/Nikaidou-Shinku/dophelia"
+            target="_blank"
+          >
+            Dophelia
+          </a>
+          {` v${APP_VERSION} (${GIT_HASH.slice(0, 7)})`}
+        </span>
+        <span>
+          <a
+            class="text-blue-600 hover:text-blue-500"
             href="https://github.com/Nikaidou-Shinku/thanatos"
             target="_blank"
           >
@@ -77,16 +87,6 @@ export default () => {
           <Show
             when={versionQuery.isSuccess}
           >{` v${versionQuery.data!.version} (${versionQuery.data!.gitHash.slice(0, 7)})`}</Show>
-        </span>
-        <span>
-          <a
-            class="text-blue-600 hover:text-blue-500"
-            href="https://github.com/Nikaidou-Shinku/dophelia"
-            target="_blank"
-          >
-            Dophelia
-          </a>
-          {` v${APP_VERSION} (${GIT_HASH.slice(0, 7)})`}
         </span>
       </div>
     </div>
