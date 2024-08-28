@@ -38,6 +38,29 @@ export default (props: HeatmapProps) => {
     })),
   );
 
+  const rawData = createMemo(() => {
+    const result: { [date: string]: ChapterInfo[] } = {};
+
+    for (const chapter of props.data) {
+      const date = dayjs
+        .tz(
+          props.ignoreUpdate
+            ? chapter.createTime
+            : (chapter.updateTime ?? chapter.createTime),
+          "Etc/UTC",
+        )
+        .format("YYYY-MM-DD");
+
+      if (typeof result[date] === "undefined") {
+        result[date] = [];
+      }
+
+      result[date].push(chapter);
+    }
+
+    return result;
+  });
+
   const calendarOptions = () => {
     const data = calData();
 
@@ -89,8 +112,32 @@ export default (props: HeatmapProps) => {
       [
         Tooltip,
         {
-          text: (_timestamp: number, value: number, dayjsDate: any) =>
-            `${dayjsDate.format("YYYY-MM-DD")} | ${value}字`,
+          text: (_timestamp: number, value: number, dayjsDate: any) => {
+            const date = dayjsDate.format("YYYY-MM-DD");
+            const chapters = rawData()[date];
+
+            if (typeof chapters === "undefined") {
+              return `${date} | ${value}字`;
+            }
+
+            let result = `<div><div>${date} | ${value}字</div>`;
+
+            for (const chapter of chapters) {
+              const time = dayjs
+                .tz(
+                  props.ignoreUpdate
+                    ? chapter.createTime
+                    : (chapter.updateTime ?? chapter.createTime),
+                  "Etc/UTC",
+                )
+                .format("HH:mm:ss");
+
+              result += `<div>${time}「${chapter.title}」${chapter.charCount}字</div>`;
+            }
+
+            result += "</div>";
+            return result;
+          },
         },
       ],
       [
