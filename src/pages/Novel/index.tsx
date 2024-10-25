@@ -33,9 +33,9 @@ export default () => {
       return null;
     }
 
-    const source = chaptersQuery.data.map((c) =>
-      dayjs.tz(c.updateTime ?? c.createTime, "Asia/Shanghai"),
-    );
+    const source = chaptersQuery.data
+      .filter((c) => c.charCount >= 1000)
+      .map((c) => dayjs.tz(c.updateTime ?? c.createTime, "Asia/Shanghai"));
 
     return dayjs.max(source);
   };
