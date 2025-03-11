@@ -33,7 +33,7 @@ export default () => {
       <div class="flex w-4/5 flex-1 flex-col items-center justify-center">
         <h1 class="text-3xl">菠萝包更新统计</h1>
         <input
-          class="mt-8 h-12 w-full max-w-96 rounded border px-4 py-2 text-lg shadow-inner"
+          class="mt-8 h-12 w-full max-w-96 rounded border border-gray-200 px-4 py-2 text-lg shadow-inner"
           placeholder="输入关键字搜索…"
           onInput={(e) => setKeyword(e.currentTarget.value)}
           value={keyword()}
@@ -59,7 +59,7 @@ export default () => {
                 <For each={searchQuery.data}>
                   {(novel) => (
                     <A
-                      class="flex flex-col border-b px-4 py-2 hover:bg-gray-100"
+                      class="flex flex-col border-b border-gray-200 px-4 py-2 hover:bg-gray-100"
                       href={`/novels/${novel.id}`}
                     >
                       <span>{novel.title}</span>

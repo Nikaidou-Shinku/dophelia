@@ -21,8 +21,8 @@ export default (props: AppProps) => {
   }));
 
   return (
-    <div class="flex h-dvh flex-col space-y-4">
-      <div class="border-b bg-gray-100 px-6 py-3">
+    <div class="flex h-dvh flex-col gap-y-4">
+      <div class="border-b border-gray-200 bg-gray-100 px-6 py-3">
         <A class="text-blue-600 hover:text-blue-500" href="/">
           Dophelia
         </A>

@@ -154,7 +154,7 @@ export default (props: HeatmapProps) => {
     <div ref={divRef} class="flex flex-col items-center lg:flex-col-reverse">
       <div
         ref={legendRef}
-        class="mb-8 flex justify-center lg:mb-0 lg:mt-4"
+        class="mb-8 flex justify-center lg:mt-4 lg:mb-0"
       ></div>
     </div>
   );

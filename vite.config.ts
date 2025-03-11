@@ -1,10 +1,11 @@
 import { resolve } from "node:path";
 import child_process from "node:child_process";
 import { defineConfig } from "vite";
+import tailwindcss from "@tailwindcss/vite";
 import solid from "vite-plugin-solid";
 
 export default defineConfig({
-  plugins: [solid()],
+  plugins: [tailwindcss(), solid()],
   resolve: {
     alias: {
       "~": resolve(__dirname, "src"),
