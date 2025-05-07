@@ -22,7 +22,7 @@ export default () => {
         return [];
       }
 
-      const resp = await fetch(`/api/search?keyword=${key}`);
+      const resp = await fetch(`/api/sfacg/search?keyword=${key}`);
       const res: NovelInfo[] = await resp.json();
       return res;
     },

@@ -13,7 +13,7 @@ export default () => {
   const novelQuery = createQuery(() => ({
     queryKey: ["novels", params.id],
     queryFn: async (props) => {
-      const resp = await fetch(`/api/novels/${props.queryKey[1]}`);
+      const resp = await fetch(`/api/sfacg/novels/${props.queryKey[1]}`);
       const res: NovelInfo = await resp.json();
       return res;
     },
@@ -22,7 +22,9 @@ export default () => {
   const chaptersQuery = createQuery(() => ({
     queryKey: ["novels", params.id, "chapters"],
     queryFn: async (props) => {
-      const resp = await fetch(`/api/novels/${props.queryKey[1]}/chapters`);
+      const resp = await fetch(
+        `/api/sfacg/novels/${props.queryKey[1]}/chapters`,
+      );
       const res: ChapterInfo[] = await resp.json();
       return res;
     },
