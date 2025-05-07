@@ -1,5 +1,5 @@
 import { JSX, Show } from "solid-js";
-import { createQuery } from "@tanstack/solid-query";
+import { useQuery } from "@tanstack/solid-query";
 import { A } from "@solidjs/router";
 import { ThanatosVersion } from "~/data/interface";
 
@@ -11,7 +11,7 @@ interface AppProps {
 }
 
 export default (props: AppProps) => {
-  const versionQuery = createQuery(() => ({
+  const versionQuery = useQuery(() => ({
     queryKey: ["version"],
     queryFn: async () => {
       const resp = await fetch("/api/version");

@@ -2,7 +2,7 @@ import { createSignal, Match, Show, Switch } from "solid-js";
 import { createMediaQuery } from "@solid-primitives/media";
 import { createWindowSize } from "@solid-primitives/resize-observer";
 import dayjs from "dayjs";
-import { createQuery } from "@tanstack/solid-query";
+import { useQuery } from "@tanstack/solid-query";
 import { A, useParams } from "@solidjs/router";
 import { ChapterInfo, NovelInfo } from "~/data/interface";
 import { Chart, DeadlineChart, Heatmap } from "~/components";
@@ -10,7 +10,7 @@ import { Chart, DeadlineChart, Heatmap } from "~/components";
 export default () => {
   const params = useParams();
 
-  const novelQuery = createQuery(() => ({
+  const novelQuery = useQuery(() => ({
     queryKey: ["novels", params.id],
     queryFn: async (props) => {
       const resp = await fetch(`/api/sfacg/novels/${props.queryKey[1]}`);
@@ -19,7 +19,7 @@ export default () => {
     },
   }));
 
-  const chaptersQuery = createQuery(() => ({
+  const chaptersQuery = useQuery(() => ({
     queryKey: ["novels", params.id, "chapters"],
     queryFn: async (props) => {
       const resp = await fetch(

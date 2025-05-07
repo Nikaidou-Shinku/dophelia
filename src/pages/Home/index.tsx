@@ -1,6 +1,6 @@
 import { createMemo, createSignal, For, Match, Show, Switch } from "solid-js";
 import { createScheduled, debounce } from "@solid-primitives/scheduled";
-import { createQuery } from "@tanstack/solid-query";
+import { useQuery } from "@tanstack/solid-query";
 import { A } from "@solidjs/router";
 import { NovelInfo } from "~/data/interface";
 
@@ -13,7 +13,7 @@ export default () => {
     return scheduled() ? value : prev;
   });
 
-  const searchQuery = createQuery(() => ({
+  const searchQuery = useQuery(() => ({
     queryKey: ["search", debouncedKeyword().trim()],
     queryFn: async (props) => {
       const key = props.queryKey[1] as string;
