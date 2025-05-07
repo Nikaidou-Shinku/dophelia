@@ -1,7 +1,8 @@
-import { JSX, Show } from "solid-js";
+import { For, JSX, Show } from "solid-js";
 import { useQuery } from "@tanstack/solid-query";
 import { A } from "@solidjs/router";
 import { ThanatosVersion } from "~/data/interface";
+import { PLATFORM_NAMES, PLATFORMS } from "~/data/constants";
 
 declare const APP_VERSION: string;
 declare const GIT_HASH: string;
@@ -22,10 +23,14 @@ export default (props: AppProps) => {
 
   return (
     <div class="flex h-dvh flex-col gap-y-4">
-      <div class="border-b border-gray-200 bg-gray-100 px-6 py-3">
-        <A class="text-blue-600 hover:text-blue-500" href="/">
-          Dophelia
-        </A>
+      <div class="flex gap-x-8 border-b border-gray-200 bg-gray-100 px-6 py-3">
+        <For each={PLATFORMS}>
+          {(platform) => (
+            <A class="text-blue-600 hover:text-blue-500" href={`/${platform}`}>
+              {PLATFORM_NAMES[platform]}
+            </A>
+          )}
+        </For>
       </div>
       {props.children}
       <div class="flex flex-col items-center">

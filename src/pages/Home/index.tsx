@@ -1,10 +1,13 @@
 import { createMemo, createSignal, For, Match, Show, Switch } from "solid-js";
 import { createScheduled, debounce } from "@solid-primitives/scheduled";
 import { useQuery } from "@tanstack/solid-query";
-import { A } from "@solidjs/router";
+import { A, useParams } from "@solidjs/router";
 import { NovelInfo } from "~/data/interface";
+import { PLATFORM_NAMES, PLATFORMS } from "~/data/constants";
 
 export default () => {
+  const params = useParams();
+
   const [keyword, setKeyword] = createSignal("");
 
   const scheduled = createScheduled((fn) => debounce(fn, 500));
@@ -14,15 +17,17 @@ export default () => {
   });
 
   const searchQuery = useQuery(() => ({
-    queryKey: ["search", debouncedKeyword().trim()],
+    queryKey: ["search", params.platform, debouncedKeyword().trim()],
     queryFn: async (props) => {
-      const key = props.queryKey[1] as string;
+      const key = props.queryKey[2] as string;
 
       if (key === "") {
         return [];
       }
 
-      const resp = await fetch(`/api/sfacg/search?keyword=${key}`);
+      const resp = await fetch(
+        `/api/${props.queryKey[1]}/search?keyword=${key}`,
+      );
       const res: NovelInfo[] = await resp.json();
       return res;
     },
@@ -31,7 +36,10 @@ export default () => {
   return (
     <div class="flex flex-1 flex-col items-center">
       <div class="flex w-4/5 flex-1 flex-col items-center justify-center">
-        <h1 class="text-3xl">菠萝包更新统计</h1>
+        <h1 class="text-3xl">
+          {PLATFORM_NAMES[params.platform as (typeof PLATFORMS)[number]]}
+          更新统计
+        </h1>
         <input
           class="mt-8 h-12 w-full max-w-96 rounded border border-gray-200 px-4 py-2 text-lg shadow-inner"
           placeholder="输入关键字搜索…"
@@ -60,7 +68,7 @@ export default () => {
                   {(novel) => (
                     <A
                       class="flex flex-col border-b border-gray-200 px-4 py-2 hover:bg-gray-100"
-                      href={`/novels/${novel.id}`}
+                      href={`/${params.platform}/${novel.id}`}
                     >
                       <span>{novel.title}</span>
                       <span class="text-sm text-gray-400">{novel.author}</span>

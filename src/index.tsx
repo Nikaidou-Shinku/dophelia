@@ -8,7 +8,8 @@ import timezone from "dayjs/plugin/timezone";
 import minMax from "dayjs/plugin/minMax";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { QueryClient, QueryClientProvider } from "@tanstack/solid-query";
-import { Route, Router } from "@solidjs/router";
+import { Navigate, Route, Router } from "@solidjs/router";
+import { PLATFORMS } from "~/data/constants";
 import App from "./App";
 import "./index.css";
 
@@ -28,11 +29,22 @@ render(
     <QueryClientProvider client={queryClient}>
       <Router root={App}>
         <Route
-          path="/novels/:id"
+          path="/:platform/:id"
           component={Novel}
-          matchFilters={{ id: /^\d+$/ }}
+          matchFilters={{
+            platform: PLATFORMS,
+            id: /^\d+$/,
+          }}
         />
-        <Route path="/" component={Home} />
+        <Route
+          path="/:platform"
+          component={Home}
+          matchFilters={{ platform: PLATFORMS }}
+        />
+        <Route
+          path="/"
+          component={() => <Navigate href={`/${PLATFORMS[0]}`} />}
+        />
       </Router>
     </QueryClientProvider>
   ),

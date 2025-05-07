@@ -11,19 +11,21 @@ export default () => {
   const params = useParams();
 
   const novelQuery = useQuery(() => ({
-    queryKey: ["novels", params.id],
+    queryKey: ["novels", params.platform, params.id],
     queryFn: async (props) => {
-      const resp = await fetch(`/api/sfacg/novels/${props.queryKey[1]}`);
+      const resp = await fetch(
+        `/api/${props.queryKey[1]}/novels/${props.queryKey[2]}`,
+      );
       const res: NovelInfo = await resp.json();
       return res;
     },
   }));
 
   const chaptersQuery = useQuery(() => ({
-    queryKey: ["novels", params.id, "chapters"],
+    queryKey: ["novels", params.platform, params.id, "chapters"],
     queryFn: async (props) => {
       const resp = await fetch(
-        `/api/sfacg/novels/${props.queryKey[1]}/chapters`,
+        `/api/${props.queryKey[1]}/novels/${props.queryKey[2]}/chapters`,
       );
       const res: ChapterInfo[] = await resp.json();
       return res;
