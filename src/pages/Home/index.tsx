@@ -63,9 +63,7 @@ export default () => {
                       href={`/novels/${novel.id}`}
                     >
                       <span>{novel.title}</span>
-                      <span class="text-sm text-gray-400">
-                        {novel.author.name}
-                      </span>
+                      <span class="text-sm text-gray-400">{novel.author}</span>
                     </A>
                   )}
                 </For>

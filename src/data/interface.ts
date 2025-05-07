@@ -1,12 +1,7 @@
-interface NovelInfoAuthor {
-  id: number;
-  name: string;
-}
-
 export interface NovelInfo {
   id: number;
   title: string;
-  author: NovelInfoAuthor;
+  author: string;
   cover: string;
   charCount: number;
   isFinish: boolean;

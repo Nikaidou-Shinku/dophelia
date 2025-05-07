@@ -85,7 +85,7 @@ export default () => {
                           #{novel().id}
                         </span>
                       </div>
-                      <span>作者：{novel().author.name}</span>
+                      <span>作者：{novel().author}</span>
                       <span>字数：{novel().charCount} 字</span>
                       <div class="space-x-2">
                         <Show
